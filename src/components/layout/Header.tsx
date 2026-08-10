@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { tr } from '../../i18n/tr';
+import { tr, BRAND_NAME } from '../../i18n/tr';
 
 const NAV_ITEMS = [
   { to: '/', label: tr.nav.home },
@@ -21,7 +21,7 @@ export function Header() {
       <div className="header__inner">
         <NavLink to="/" className="header__logo" onClick={closeMenu}>
           <span className="header__logo-icon">#</span>
-          NUMBER HUNT
+          {BRAND_NAME}
         </NavLink>
 
         <button

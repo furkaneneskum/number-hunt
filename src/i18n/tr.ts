@@ -1,3 +1,5 @@
+export const BRAND_NAME = 'NUMBER HUNT';
+
 export const tr = {
   nav: {
     home: 'Ana Sayfa',
@@ -10,14 +12,14 @@ export const tr = {
   },
   hero: {
     title: 'Sayıyı Bulabilir misin?',
-    subtitle: 'Akıllıca tahmin et. Serini yükselt. Number Hunt şampiyonu ol.',
+    subtitle: 'Akıllıca tahmin et. Serini yükselt. NUMBER HUNT şampiyonu ol.',
     playNow: 'HEMEN OYNA',
     howToPlay: 'NASIL OYNANIR',
   },
   home: {
     sectionTitle: 'Hızlı düşün. Akıllıca tahmin et.',
     sectionSubtitle:
-      'Sayıları okuma becerin ne kadar iyi? Serini yükselt, skorunu geç, Number Hunt ustası ol.',
+      'Sayıları okuma becerin ne kadar iyi? Serini yükselt, skorunu geç, NUMBER HUNT ustası ol.',
     level: 'Seviye',
     bestStreak: 'En İyi Seri',
     bestScore: 'En Yüksek Skor',
@@ -95,7 +97,7 @@ export const tr = {
   },
   statistics: {
     title: 'İstatistikler',
-    subtitle: 'Number Hunt performansın',
+    subtitle: 'NUMBER HUNT performansın',
     empty: 'İstatistikleri görmek için ilk oyununu oyna.',
     gamesPlayed: 'Oynanan Oyun',
     gamesWon: 'Kazanılan',
