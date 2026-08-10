@@ -48,13 +48,13 @@ git push -u origin main
 
 GitHub Desktop kullanıyorsan: **File → Add local repository** ile klasörü ekle, ardından **Publish repository**.
 
-### 3. GitHub Pages ile yayınla (isteğe bağlı)
+### 3. GitHub Pages ile yayınla
 
 1. Repo → **Settings** → **Pages**
-2. **Source**: GitHub Actions
-3. Aşağıdaki workflow dosyasını ekle veya `/.github/workflows/deploy.yml` dosyasını kullan
-
----
+2. **Build and deployment** → **Source:** **GitHub Actions** seç  
+   ⚠️ **Deploy from a branch DEĞİL** — Jekyll ile React projesi build edilemez.
+3. Ayarı kaydettikten sonra **Actions** → **Deploy to GitHub Pages** → **Re-run all jobs**
+4. Deploy bitince site: **https://furkaneneskum.github.io/number-hunt/**
 
 ## Proje Yapısı
 

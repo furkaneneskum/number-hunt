@@ -10,7 +10,7 @@ import { SettingsPage } from './pages/SettingsPage';
 export function App() {
   return (
     <GameProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
