@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGameContext } from '../context/GameContext';
+import { useAuth } from '../context/AuthContext';
 import { Card } from '../components/ui/Card';
 import { ConfirmModal } from '../components/ui/Modal';
 import { tr } from '../i18n/tr';
@@ -33,8 +35,15 @@ function Toggle({
 
 export function SettingsPage() {
   const { player, updateSettings, resetProgress } = useGameContext();
+  const { username, logout } = useAuth();
+  const navigate = useNavigate();
   const [showReset, setShowReset] = useState(false);
   const { settings } = player;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="page settings-page">
@@ -68,6 +77,16 @@ export function SettingsPage() {
             ))}
           </div>
         </div>
+      </Card>
+
+      <Card className="settings-panel">
+        <h3 className="settings-panel__title">{tr.settings.account}</h3>
+        <p className="settings-panel__desc">
+          {username ? `@${username}` : '—'}
+        </p>
+        <button className="btn btn--secondary" onClick={handleLogout}>
+          {tr.settings.logout}
+        </button>
       </Card>
 
       <Card className="settings-panel settings-panel--danger">

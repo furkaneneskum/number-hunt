@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
+import { LeaderboardSidebar } from './LeaderboardSidebar';
 import { useGameContext } from '../../context/GameContext';
 import { Modal } from '../ui/Modal';
 import { getAchievementById } from '../../config/achievements';
@@ -11,10 +12,15 @@ export function Layout() {
 
   return (
     <div className="layout">
-      <Header />
-      <main className="main">
-        <Outlet />
-      </main>
+      <div className="app-shell">
+        <LeaderboardSidebar />
+        <div className="app-shell__main">
+          <Header />
+          <main className="main">
+            <Outlet />
+          </main>
+        </div>
+      </div>
 
       {showLevelUp && (
         <div className="toast toast--level-up" role="alert">

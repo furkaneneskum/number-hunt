@@ -1,7 +1,12 @@
 import { createContext, useContext, useCallback, useState, useEffect, useRef, type ReactNode } from 'react';
 import type { PlayerData, GameState, GuessFeedback, GameModeId, DifficultyId } from '../types';
-import { loadPlayer, savePlayer, resetPlayer as resetStorage } from '../services/storage';
-import { tr } from '../i18n/tr';
+import {
+  loadPlayer,
+  savePlayer,
+  resetPlayer as resetStorage,
+  getSessionUsername,
+} from '../services/storage';
+import { useAuth } from './AuthContext';
 import {
   createGameState,
   validateGuess,
@@ -16,6 +21,7 @@ import {
 } from '../services/gameLogic';
 import { DIFFICULTIES, GAME_MODES } from '../config/gameConfig';
 import { playSound, setSoundEnabled, resumeAudio } from '../services/sound';
+import { tr } from '../i18n/tr';
 import type { DailyChallenge } from '../types';
 
 interface GameContextValue {
@@ -44,13 +50,18 @@ interface GameContextValue {
 const GameContext = createContext<GameContextValue | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
-  const [player, setPlayer] = useState<PlayerData>(() => {
-    const p = loadPlayer();
+  const { username, refreshLeaderboard } = useAuth();
+
+  const loadForUser = useCallback((name: string | null): PlayerData => {
+    if (!name) return structuredClone(loadPlayer(''));
+    const p = loadPlayer(name);
     if (shouldResetDailyChallenge(p)) {
       return { ...p, dailyChallengeCompleted: false, lastDailyChallenge: new Date().toISOString().slice(0, 10) };
     }
     return p;
-  });
+  }, []);
+
+  const [player, setPlayer] = useState<PlayerData>(() => loadForUser(getSessionUsername()));
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [feedback, setFeedback] = useState<GuessFeedback | null>(null);
   const [hintMessage, setHintMessage] = useState<string | null>(null);
@@ -61,6 +72,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const gameEndedRef = useRef(false);
   const dailyChallenge = getDailyChallenge();
+
+  useEffect(() => {
+    if (username) {
+      setPlayer(loadForUser(username));
+      setGameState(null);
+      setFeedback(null);
+    }
+  }, [username, loadForUser]);
 
   const xpProgress = getXpProgress(player.xp, player.level);
 
@@ -77,10 +96,16 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [player.settings.theme, player.settings.animations]);
 
-  const persistPlayer = useCallback((updated: PlayerData) => {
-    setPlayer(updated);
-    savePlayer(updated);
-  }, []);
+  const persistPlayer = useCallback(
+    (updated: PlayerData) => {
+      setPlayer(updated);
+      if (username) {
+        savePlayer(username, updated);
+        refreshLeaderboard();
+      }
+    },
+    [username, refreshLeaderboard]
+  );
 
   const stopTimer = useCallback(() => {
     if (timerRef.current) {
@@ -380,12 +405,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
   );
 
   const resetProgress = useCallback(() => {
-    const fresh = resetStorage();
+    if (!username) return;
+    const fresh = resetStorage(username);
     setPlayer(fresh);
     setGameState(null);
     setFeedback(null);
     setLastGameResult(null);
-  }, []);
+    refreshLeaderboard();
+  }, [username, refreshLeaderboard]);
 
   return (
     <GameContext.Provider
