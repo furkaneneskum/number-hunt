@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { tr } from '../../i18n/tr';
@@ -24,6 +24,7 @@ export function HowToPlayModal({ open, onClose }: { open: boolean; onClose: () =
 
 export function HeroSection() {
   const [showHowTo, setShowHowTo] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <section className="hero">
@@ -31,9 +32,9 @@ export function HeroSection() {
         <h1 className="hero__title">{tr.hero.title}</h1>
         <p className="hero__subtitle">{tr.hero.subtitle}</p>
         <div className="hero__actions">
-          <Link to="/play">
-            <Button size="lg">{tr.hero.playNow}</Button>
-          </Link>
+          <Button size="lg" onClick={() => navigate('/play')}>
+            {tr.hero.playNow}
+          </Button>
           <Button variant="secondary" size="lg" onClick={() => setShowHowTo(true)}>
             {tr.hero.howToPlay}
           </Button>

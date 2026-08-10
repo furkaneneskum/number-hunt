@@ -44,7 +44,7 @@ export const DEFAULT_PLAYER: PlayerData = {
   dailyChallengeCompleted: false,
 };
 
-type UserRegistry = Record<string, PlayerData>;
+type UserRegistry = Record<string, { player: PlayerData; displayName: string }>;
 
 function normalizeUsername(raw: string): string {
   return raw.trim().toLowerCase();
@@ -68,7 +68,10 @@ export function validateUsername(raw: string): { valid: boolean; error?: string 
 function loadRegistry(): UserRegistry {
   try {
     const raw = localStorage.getItem(USERS_KEY);
-    if (raw) return JSON.parse(raw) as UserRegistry;
+    if (raw) {
+      const parsed = JSON.parse(raw) as UserRegistry;
+      return migrateRegistryFormat(parsed);
+    }
     migrateLegacyPlayer();
     const after = localStorage.getItem(USERS_KEY);
     if (after) return JSON.parse(after) as UserRegistry;
@@ -76,6 +79,21 @@ function loadRegistry(): UserRegistry {
   } catch {
     return {};
   }
+}
+
+function migrateRegistryFormat(registry: Record<string, unknown>): UserRegistry {
+  let needsSave = false;
+  const migrated: UserRegistry = {};
+  for (const [key, value] of Object.entries(registry)) {
+    if (value && typeof value === 'object' && 'player' in value && 'displayName' in value) {
+      migrated[key] = value as { player: PlayerData; displayName: string };
+    } else {
+      migrated[key] = { player: value as PlayerData, displayName: key };
+      needsSave = true;
+    }
+  }
+  if (needsSave) saveRegistry(migrated);
+  return migrated;
 }
 
 function saveRegistry(registry: UserRegistry): void {
@@ -92,7 +110,9 @@ function migrateLegacyPlayer(): void {
     if (!legacy) return;
     const parsed = JSON.parse(legacy) as PlayerData;
     const username = 'oyuncu';
-    const registry: UserRegistry = { [username]: parsed };
+    const registry: UserRegistry = {
+      [username]: { player: parsed, displayName: 'oyuncu' },
+    };
     saveRegistry(registry);
     setSessionUsername(username);
     localStorage.removeItem(LEGACY_KEY);
@@ -116,8 +136,9 @@ export function logout(): void {
 export function loadPlayer(username: string): PlayerData {
   const key = normalizeUsername(username);
   const registry = loadRegistry();
-  const parsed = registry[key];
-  if (!parsed) return structuredClone(DEFAULT_PLAYER);
+  const entry = registry[key];
+  if (!entry) return structuredClone(DEFAULT_PLAYER);
+  const parsed = entry.player;
   return {
     ...DEFAULT_PLAYER,
     ...parsed,
@@ -131,7 +152,11 @@ export function loadPlayer(username: string): PlayerData {
 export function savePlayer(username: string, player: PlayerData): void {
   const key = normalizeUsername(username);
   const registry = loadRegistry();
-  registry[key] = player;
+  const existing = registry[key];
+  registry[key] = {
+    player,
+    displayName: existing?.displayName ?? displayUsername(username),
+  };
   saveRegistry(registry);
 }
 
@@ -145,7 +170,10 @@ export function loginUser(rawUsername: string): { username: string; player: Play
   const isNew = !registry[key];
 
   if (isNew) {
-    registry[key] = structuredClone(DEFAULT_PLAYER);
+    registry[key] = { player: structuredClone(DEFAULT_PLAYER), displayName: display };
+    saveRegistry(registry);
+  } else if (registry[key] && !registry[key].displayName) {
+    registry[key].displayName = display;
     saveRegistry(registry);
   }
 
@@ -156,9 +184,9 @@ export function loginUser(rawUsername: string): { username: string; player: Play
 export function resetPlayer(username: string): PlayerData {
   const key = normalizeUsername(username);
   const registry = loadRegistry();
-  registry[key] = structuredClone(DEFAULT_PLAYER);
+  registry[key] = { player: structuredClone(DEFAULT_PLAYER), displayName: registry[key]?.displayName ?? displayUsername(username) };
   saveRegistry(registry);
-  return registry[key];
+  return registry[key].player;
 }
 
 export function getLeaderboard(currentUsername?: string | null): LeaderboardEntry[] {
@@ -166,13 +194,13 @@ export function getLeaderboard(currentUsername?: string | null): LeaderboardEntr
   const currentKey = currentUsername ? normalizeUsername(currentUsername) : null;
 
   return Object.entries(registry)
-    .map(([key, player]) => ({
-      username: key,
-      score: player.score,
-      level: player.level,
-      xp: player.xp,
-      bestStreak: player.bestStreak,
-      gamesWon: player.gamesWon,
+    .map(([key, entry]) => ({
+      username: entry.displayName || key,
+      score: entry.player.score,
+      level: entry.player.level,
+      xp: entry.player.xp,
+      bestStreak: entry.player.bestStreak,
+      gamesWon: entry.player.gamesWon,
       lastActive: 0,
       isCurrentUser: currentKey === key,
     }))

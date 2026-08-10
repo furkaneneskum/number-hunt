@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useGameContext } from '../context/GameContext';
 import { ModeSelector } from '../components/game/ModeSelector';
 import { DifficultySelector } from '../components/game/DifficultySelector';
@@ -28,9 +28,15 @@ export function PlayPage() {
   const [selectedMode, setSelectedMode] = useState<GameModeId>(player.settings.mode);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyId>(player.settings.difficulty);
 
-  useEffect(() => {
-    updateSettings({ mode: selectedMode, difficulty: selectedDifficulty });
-  }, [selectedMode, selectedDifficulty, updateSettings]);
+  const handleModeChange = (mode: GameModeId) => {
+    setSelectedMode(mode);
+    updateSettings({ mode });
+  };
+
+  const handleDifficultyChange = (difficulty: DifficultyId) => {
+    setSelectedDifficulty(difficulty);
+    updateSettings({ difficulty });
+  };
 
   const handleStart = () => {
     startGame(selectedMode, selectedDifficulty);
@@ -42,8 +48,8 @@ export function PlayPage() {
         <h1 className="page-title">{tr.play.title}</h1>
         <p className="page-subtitle">{tr.play.subtitle}</p>
 
-        <ModeSelector selected={selectedMode} onChange={setSelectedMode} />
-        <DifficultySelector selected={selectedDifficulty} onChange={setSelectedDifficulty} />
+        <ModeSelector selected={selectedMode} onChange={handleModeChange} />
+        <DifficultySelector selected={selectedDifficulty} onChange={handleDifficultyChange} />
 
         {selectedMode === 'challenge' && (
           <Card className="challenge-card">

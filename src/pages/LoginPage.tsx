@@ -9,6 +9,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
+  const [welcome, setWelcome] = useState('');
 
   if (isAuthenticated) return <Navigate to="/" replace />;
 
@@ -19,7 +20,8 @@ export function LoginPage() {
       setError(result.error);
       return;
     }
-    navigate('/');
+    setWelcome(result.isNew ? tr.login.saved : tr.login.welcomeBack);
+    setTimeout(() => navigate('/'), 600);
   };
 
   return (
@@ -63,6 +65,7 @@ export function LoginPage() {
           <Button type="submit" size="lg" className="login-form__submit">
             {tr.login.submit}
           </Button>
+          {welcome && <p className="login-form__success">{welcome}</p>}
         </form>
 
         <p className="login-card__hint">{tr.login.hint}</p>

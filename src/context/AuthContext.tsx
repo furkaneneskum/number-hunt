@@ -11,7 +11,7 @@ interface AuthContextValue {
   username: string | null;
   isAuthenticated: boolean;
   leaderboard: LeaderboardEntry[];
-  login: (username: string) => { error?: string };
+  login: (username: string) => { error?: string; isNew?: boolean };
   logout: () => void;
   refreshLeaderboard: () => void;
 }
@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = loginUser(raw);
       setUsername(result.username);
       setLeaderboard(getLeaderboard(result.username));
-      return {};
+      return { isNew: result.isNew };
     } catch (e) {
       return { error: e instanceof Error ? e.message : 'Giriş başarısız.' };
     }

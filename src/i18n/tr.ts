@@ -16,7 +16,9 @@ export const tr = {
     usernameLabel: 'Kullanıcı Adı',
     usernamePlaceholder: 'Kullanıcı adını yaz...',
     submit: 'OYUNA GİR',
-    hint: 'Her kullanıcı adı benzersizdir. Skorun otomatik kaydedilir.',
+    hint: 'Her kullanıcı adı benzersizdir. Skorun tarayıcıda otomatik kaydedilir.',
+    saved: 'Hesabın kaydedildi!',
+    welcomeBack: 'Tekrar hoş geldin!',
   },
   leaderboard: {
     title: 'Sıralama',
