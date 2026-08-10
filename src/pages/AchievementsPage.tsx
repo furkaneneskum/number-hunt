@@ -1,6 +1,7 @@
 import { useGameContext } from '../context/GameContext';
 import { ACHIEVEMENTS } from '../config/achievements';
 import { Card } from '../components/ui/Card';
+import { tr } from '../i18n/tr';
 
 export function AchievementsPage() {
   const { player } = useGameContext();
@@ -10,14 +11,14 @@ export function AchievementsPage() {
 
   return (
     <div className="page achievements-page">
-      <h1 className="page-title">Achievements</h1>
+      <h1 className="page-title">{tr.achievements.title}</h1>
       <p className="page-subtitle">
-        {unlockedCount}/{ACHIEVEMENTS.length} unlocked
+        {tr.achievements.unlocked(unlockedCount, ACHIEVEMENTS.length)}
       </p>
 
       {unlockedCount === 0 && (
         <Card className="empty-state">
-          <p>No achievements unlocked yet. Keep playing!</p>
+          <p>{tr.achievements.empty}</p>
         </Card>
       )}
 

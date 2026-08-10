@@ -2,31 +2,21 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
-
-const STEPS = [
-  { num: 1, text: 'Choose your difficulty and game mode' },
-  { num: 2, text: 'Guess the secret number in the given range' },
-  { num: 3, text: 'Use Too High / Too Low feedback to narrow it down' },
-  { num: 4, text: 'Earn score based on speed and accuracy' },
-  { num: 5, text: 'Build streaks for multiplier bonuses' },
-  { num: 6, text: 'Gain XP and level up over time' },
-  { num: 7, text: 'Unlock achievements as you improve' },
-  { num: 8, text: 'Complete daily challenges for bonus rewards' },
-];
+import { tr } from '../../i18n/tr';
 
 export function HowToPlayModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Modal open={open} onClose={onClose} title="How to Play">
+    <Modal open={open} onClose={onClose} title={tr.howToPlay.title}>
       <ol className="how-to-play">
-        {STEPS.map((step) => (
-          <li key={step.num} className="how-to-play__step">
-            <span className="how-to-play__num">{step.num}</span>
-            <span>{step.text}</span>
+        {tr.howToPlay.steps.map((text, i) => (
+          <li key={i} className="how-to-play__step">
+            <span className="how-to-play__num">{i + 1}</span>
+            <span>{text}</span>
           </li>
         ))}
       </ol>
       <Button onClick={onClose} className="how-to-play__close">
-        Got it!
+        {tr.howToPlay.gotIt}
       </Button>
     </Modal>
   );
@@ -38,16 +28,14 @@ export function HeroSection() {
   return (
     <section className="hero">
       <div className="hero__content">
-        <h1 className="hero__title">Can You Find The Number?</h1>
-        <p className="hero__subtitle">
-          Guess smarter. Build your streak. Become the Number Hunt champion.
-        </p>
+        <h1 className="hero__title">{tr.hero.title}</h1>
+        <p className="hero__subtitle">{tr.hero.subtitle}</p>
         <div className="hero__actions">
           <Link to="/play">
-            <Button size="lg">PLAY NOW</Button>
+            <Button size="lg">{tr.hero.playNow}</Button>
           </Link>
           <Button variant="secondary" size="lg" onClick={() => setShowHowTo(true)}>
-            HOW TO PLAY
+            {tr.hero.howToPlay}
           </Button>
         </div>
       </div>

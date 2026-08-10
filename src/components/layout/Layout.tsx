@@ -3,6 +3,7 @@ import { Header } from './Header';
 import { useGameContext } from '../../context/GameContext';
 import { Modal } from '../ui/Modal';
 import { getAchievementById } from '../../config/achievements';
+import { tr } from '../../i18n/tr';
 
 export function Layout() {
   const { showLevelUp, showStreakLost, newAchievements, player, dismissLevelUp, dismissAchievements } =
@@ -19,10 +20,10 @@ export function Layout() {
         <div className="toast toast--level-up" role="alert">
           <span className="toast__emoji">🎉</span>
           <div>
-            <strong>LEVEL UP!</strong>
-            <p>You reached Level {player.level}</p>
+            <strong>{tr.toast.levelUp}</strong>
+            <p>{tr.toast.levelReached(player.level)}</p>
           </div>
-          <button className="toast__close" onClick={dismissLevelUp} aria-label="Dismiss">
+          <button className="toast__close" onClick={dismissLevelUp} aria-label="Kapat">
             ×
           </button>
         </div>
@@ -30,12 +31,12 @@ export function Layout() {
 
       {showStreakLost && (
         <div className="toast toast--streak-lost" role="alert">
-          <strong>STREAK LOST</strong>
+          <strong>{tr.toast.streakLost}</strong>
         </div>
       )}
 
       {newAchievements.length > 0 && (
-        <Modal open onClose={dismissAchievements} title="Achievement Unlocked!" className="modal--achievement">
+        <Modal open onClose={dismissAchievements} title={tr.toast.achievementUnlocked} className="modal--achievement">
           {newAchievements.map((id) => {
             const ach = getAchievementById(id);
             if (!ach) return null;
@@ -50,7 +51,7 @@ export function Layout() {
             );
           })}
           <button className="btn btn--primary" onClick={dismissAchievements}>
-            Awesome!
+            {tr.toast.awesome}
           </button>
         </Modal>
       )}

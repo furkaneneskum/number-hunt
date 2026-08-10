@@ -8,6 +8,7 @@ import {
   getXpForLevel,
   generateDailyChallenge,
 } from '../config/gameConfig';
+import { tr } from '../i18n/tr';
 import type {
   DifficultyId,
   GameModeId,
@@ -92,20 +93,20 @@ export function validateGuess(
 ): { valid: boolean; number?: number; error?: string; isDuplicate?: boolean } {
   const trimmed = value.trim();
   if (!trimmed) {
-    return { valid: false, error: `Please enter a number between ${min} and ${max}.` };
+    return { valid: false, error: tr.feedback.invalidRange(min, max) };
   }
 
   const num = Number(trimmed);
   if (!Number.isInteger(num) || !Number.isFinite(num)) {
-    return { valid: false, error: `Please enter a number between ${min} and ${max}.` };
+    return { valid: false, error: tr.feedback.invalidRange(min, max) };
   }
 
   if (num < min || num > max) {
-    return { valid: false, error: `Please enter a number between ${min} and ${max}.` };
+    return { valid: false, error: tr.feedback.invalidRange(min, max) };
   }
 
   if (previousGuesses.includes(num)) {
-    return { valid: false, error: `You already guessed ${num}.`, isDuplicate: true };
+    return { valid: false, error: tr.feedback.duplicateGuess(num), isDuplicate: true };
   }
 
   return { valid: true, number: num };
@@ -114,11 +115,11 @@ export function validateGuess(
 function getResultFeedback(result: GuessResult): Pick<GuessFeedback, 'message' | 'subMessage' | 'emoji'> {
   switch (result) {
     case 'correct':
-      return { message: 'CORRECT!', subMessage: 'You found it!', emoji: '🎉' };
+      return { message: tr.feedback.correct, subMessage: tr.feedback.correctSub, emoji: '🎉' };
     case 'tooLow':
-      return { message: 'TOO LOW', subMessage: 'Try a higher number', emoji: '⬆️' };
+      return { message: tr.feedback.tooLow, subMessage: tr.feedback.tooLowSub, emoji: '⬆️' };
     case 'tooHigh':
-      return { message: 'TOO HIGH', subMessage: 'Try a lower number', emoji: '⬇️' };
+      return { message: tr.feedback.tooHigh, subMessage: tr.feedback.tooHighSub, emoji: '⬇️' };
   }
 }
 
@@ -200,17 +201,17 @@ export function useHint(state: GameState): HintResult | null {
 
   switch (hintType) {
     case 'parity':
-      message = secret % 2 === 0 ? 'The number is EVEN.' : 'The number is ODD.';
+      message = secret % 2 === 0 ? tr.hints.even : tr.hints.odd;
       break;
     case 'range': {
       const quarter = Math.floor((diff.max - diff.min) / 4);
       const lower = Math.max(diff.min, secret - quarter);
       const upper = Math.min(diff.max, secret + quarter);
-      message = `The number is between ${lower} and ${upper}.`;
+      message = tr.hints.between(lower, upper);
       break;
     }
     case 'divisible':
-      message = secret % 5 === 0 ? 'The number is divisible by 5.' : 'The number is NOT divisible by 5.';
+      message = secret % 5 === 0 ? tr.hints.divisible : tr.hints.notDivisible;
       break;
   }
 
@@ -305,7 +306,7 @@ export function getDifficultyRange(difficulty: DifficultyId): string {
 export function getFavoriteDifficulty(player: PlayerData): string {
   const stats = player.difficultyStats;
   const entries = Object.entries(stats) as [DifficultyId, number][];
-  if (entries.every(([, v]) => v === 0)) return 'None yet';
+  if (entries.every(([, v]) => v === 0)) return tr.statistics.noneYet;
   entries.sort((a, b) => b[1] - a[1]);
   return DIFFICULTIES[entries[0][0]].label;
 }

@@ -1,5 +1,6 @@
 import { Card } from '../ui/Card';
 import { DIFFICULTIES } from '../../config/gameConfig';
+import { tr } from '../../i18n/tr';
 import type { GameState } from '../../types';
 
 interface GameCardProps {
@@ -11,7 +12,7 @@ export function GameCard({ gameState }: GameCardProps) {
 
   return (
     <Card className="game-card">
-      <h2 className="game-card__title">GUESS THE NUMBER</h2>
+      <h2 className="game-card__title">{tr.game.guessTheNumber}</h2>
       <p className="game-card__range">
         {diff.min} — {diff.max}
       </p>
@@ -22,7 +23,7 @@ export function GameCard({ gameState }: GameCardProps) {
       </div>
       {gameState.guesses.length > 0 && (
         <div className="game-card__history">
-          <span className="game-card__history-label">Previous guesses:</span>
+          <span className="game-card__history-label">{tr.game.previousGuesses}</span>
           <div className="game-card__history-list">
             {gameState.guesses.map((g, i) => (
               <span key={i} className="game-card__history-item">

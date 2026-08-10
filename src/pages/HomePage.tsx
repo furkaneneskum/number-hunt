@@ -3,6 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Link } from 'react-router-dom';
 import { useGameContext } from '../context/GameContext';
 import { GAME_MODES } from '../config/gameConfig';
+import { tr } from '../i18n/tr';
 
 export function HomePage() {
   const { player } = useGameContext();
@@ -12,10 +13,8 @@ export function HomePage() {
       <HeroSection />
 
       <section className="home-features">
-        <h2 className="section-title">Think fast. Guess smart.</h2>
-        <p className="section-subtitle">
-          How good are you at reading the numbers? Build your streak. Beat your score. Become a Number Hunt master.
-        </p>
+        <h2 className="section-title">{tr.home.sectionTitle}</h2>
+        <p className="section-subtitle">{tr.home.sectionSubtitle}</p>
 
         <div className="features-grid">
           {Object.values(GAME_MODES).map((mode) => (
@@ -32,19 +31,19 @@ export function HomePage() {
         <section className="home-stats-preview">
           <Card className="stats-preview-card">
             <div className="stats-preview-card__item">
-              <span className="stats-preview-card__label">Level</span>
+              <span className="stats-preview-card__label">{tr.home.level}</span>
               <span className="stats-preview-card__value">{player.level}</span>
             </div>
             <div className="stats-preview-card__item">
-              <span className="stats-preview-card__label">Best Streak</span>
+              <span className="stats-preview-card__label">{tr.home.bestStreak}</span>
               <span className="stats-preview-card__value">🔥 {player.bestStreak}</span>
             </div>
             <div className="stats-preview-card__item">
-              <span className="stats-preview-card__label">Best Score</span>
-              <span className="stats-preview-card__value">{player.bestScore.toLocaleString()}</span>
+              <span className="stats-preview-card__label">{tr.home.bestScore}</span>
+              <span className="stats-preview-card__value">{player.bestScore.toLocaleString('tr-TR')}</span>
             </div>
             <Link to="/statistics" className="stats-preview-card__link">
-              View all stats →
+              {tr.home.viewStats}
             </Link>
           </Card>
         </section>

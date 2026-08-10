@@ -1,5 +1,6 @@
 import { useGameContext } from '../../context/GameContext';
 import { GAME_MODES } from '../../config/gameConfig';
+import { tr } from '../../i18n/tr';
 
 export function ScoreBoard() {
   const { player, gameState, xpProgress } = useGameContext();
@@ -14,25 +15,25 @@ export function ScoreBoard() {
   return (
     <div className="scoreboard">
       <div className="scoreboard__item">
-        <span className="scoreboard__label">Score</span>
+        <span className="scoreboard__label">{tr.game.score}</span>
         <span className="scoreboard__value">{gameState.score + gameState.roundScore}</span>
       </div>
 
       <div className="scoreboard__item">
-        <span className="scoreboard__label">Streak</span>
+        <span className="scoreboard__label">{tr.game.streak}</span>
         <span className="scoreboard__value scoreboard__value--streak">
           🔥 {gameState.sessionStreak}
         </span>
       </div>
 
       <div className="scoreboard__item">
-        <span className="scoreboard__label">Level</span>
+        <span className="scoreboard__label">{tr.game.level}</span>
         <span className="scoreboard__value">{player.level}</span>
       </div>
 
       {showLives && (
         <div className="scoreboard__item">
-          <span className="scoreboard__label">Lives</span>
+          <span className="scoreboard__label">{tr.game.lives}</span>
           <span className="scoreboard__value scoreboard__value--lives">
             {'❤️'.repeat(gameState.lives)}
             {'🖤'.repeat(Math.max(0, gameState.maxLives - gameState.lives))}
@@ -42,7 +43,7 @@ export function ScoreBoard() {
 
       {showAttempts && (
         <div className="scoreboard__item">
-          <span className="scoreboard__label">Attempts</span>
+          <span className="scoreboard__label">{tr.game.attempts}</span>
           <span className="scoreboard__value">
             {gameState.attempts}/{gameState.maxAttempts}
           </span>
@@ -51,7 +52,7 @@ export function ScoreBoard() {
 
       {showTimer && (
         <div className="scoreboard__item">
-          <span className="scoreboard__label">Time</span>
+          <span className="scoreboard__label">{tr.game.time}</span>
           <span className={`scoreboard__value ${(gameState.timeRemaining ?? 0) <= 10 ? 'scoreboard__value--urgent' : ''}`}>
             {gameState.timeRemaining}s
           </span>
@@ -60,7 +61,7 @@ export function ScoreBoard() {
 
       {gameState.mode === 'timeAttack' && (
         <div className="scoreboard__item">
-          <span className="scoreboard__label">Found</span>
+          <span className="scoreboard__label">{tr.game.found}</span>
           <span className="scoreboard__value">{gameState.timeAttackCorrect}</span>
         </div>
       )}

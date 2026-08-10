@@ -1,5 +1,6 @@
 import { useGameContext } from '../../context/GameContext';
 import { Button } from '../ui/Button';
+import { tr } from '../../i18n/tr';
 
 export function HintButton() {
   const { gameState, useHintAction, hintMessage } = useGameContext();
@@ -15,9 +16,9 @@ export function HintButton() {
         variant="secondary"
         onClick={useHintAction}
         disabled={disabled}
-        aria-label={`Use hint, ${hintsLeft} remaining`}
+        aria-label={`İpucu kullan, ${hintsLeft} kaldı`}
       >
-        💡 HINT {hintsLeft > 0 && `(${hintsLeft})`}
+        💡 {tr.game.hint} {hintsLeft > 0 && `(${hintsLeft})`}
       </Button>
       {hintMessage && (
         <p className="hint-message" role="status">
@@ -25,7 +26,7 @@ export function HintButton() {
         </p>
       )}
       {gameState.challengeNoHints && (
-        <p className="hint-message hint-message--muted">Hints disabled for this challenge</p>
+        <p className="hint-message hint-message--muted">{tr.game.hintsDisabled}</p>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import type { DifficultyId } from '../../types';
 import { DIFFICULTIES } from '../../config/gameConfig';
+import { tr } from '../../i18n/tr';
 
 interface DifficultySelectorProps {
   selected: DifficultyId;
@@ -10,14 +11,14 @@ export function DifficultySelector({ selected, onChange }: DifficultySelectorPro
   const difficulties = Object.values(DIFFICULTIES);
 
   return (
-    <div className="selector" role="group" aria-label="Select difficulty">
-      <h3 className="selector__title">Difficulty</h3>
+    <div className="selector" role="group" aria-label="Zorluk seç">
+      <h3 className="selector__title">{tr.play.difficulty}</h3>
       <div className="selector__grid">
         {difficulties.map((d) => (
           <button
             key={d.id}
             className={`selector__option ${selected === d.id ? 'selector__option--active' : ''}`}
-            onClick={() => onChange(d.id)}
+            onClick={() => onChange(d.id as DifficultyId)}
             aria-pressed={selected === d.id}
           >
             <span className="selector__option-label">{d.label}</span>

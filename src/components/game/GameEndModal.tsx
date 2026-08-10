@@ -1,6 +1,7 @@
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { useGameContext } from '../../context/GameContext';
+import { tr } from '../../i18n/tr';
 
 interface GameEndModalProps {
   type: 'won' | 'lost';
@@ -17,12 +18,12 @@ export function GameEndModal({ type }: GameEndModalProps) {
     <Modal open closable={false} className={`modal--game-end modal--${type}`}>
       <div className="game-end">
         <span className="game-end__emoji">{isWin ? '🎉' : '💀'}</span>
-        <h2 className="game-end__title">{isWin ? 'YOU FOUND IT!' : 'GAME OVER'}</h2>
+        <h2 className="game-end__title">{isWin ? tr.gameEnd.won : tr.gameEnd.lost}</h2>
 
         <div className="game-end__stats">
           <div className="game-end__stat">
             <span className="game-end__stat-label">
-              {isWin ? 'Secret Number' : 'The number was'}
+              {isWin ? tr.gameEnd.secretNumber : tr.gameEnd.numberWas}
             </span>
             <span className="game-end__stat-value game-end__stat-value--secret">
               {lastGameResult.secretNumber}
@@ -31,25 +32,25 @@ export function GameEndModal({ type }: GameEndModalProps) {
 
           {isWin && (
             <div className="game-end__stat">
-              <span className="game-end__stat-label">Attempts</span>
+              <span className="game-end__stat-label">{tr.gameEnd.attempts}</span>
               <span className="game-end__stat-value">{lastGameResult.attempts}</span>
             </div>
           )}
 
           <div className="game-end__stat">
-            <span className="game-end__stat-label">Score</span>
-            <span className="game-end__stat-value">{lastGameResult.score.toLocaleString()}</span>
+            <span className="game-end__stat-label">{tr.gameEnd.score}</span>
+            <span className="game-end__stat-value">{lastGameResult.score.toLocaleString('tr-TR')}</span>
           </div>
 
           <div className="game-end__stat">
-            <span className="game-end__stat-label">XP Earned</span>
+            <span className="game-end__stat-label">{tr.gameEnd.xpEarned}</span>
             <span className="game-end__stat-value game-end__stat-value--xp">
               +{lastGameResult.xpEarned} XP
             </span>
           </div>
 
           <div className="game-end__stat">
-            <span className="game-end__stat-label">Streak</span>
+            <span className="game-end__stat-label">{tr.gameEnd.streak}</span>
             <span className="game-end__stat-value">🔥 {lastGameResult.streak}</span>
           </div>
         </div>
@@ -57,15 +58,15 @@ export function GameEndModal({ type }: GameEndModalProps) {
         <div className="game-end__actions">
           {isWin ? (
             <Button size="lg" onClick={nextRound}>
-              NEXT ROUND
+              {tr.gameEnd.nextRound}
             </Button>
           ) : (
             <Button size="lg" onClick={nextRound}>
-              PLAY AGAIN
+              {tr.gameEnd.playAgain}
             </Button>
           )}
           <Button variant="ghost" onClick={endGame}>
-            BACK TO MENU
+            {tr.gameEnd.backToMenu}
           </Button>
         </div>
       </div>

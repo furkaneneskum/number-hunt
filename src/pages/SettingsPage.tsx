@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useGameContext } from '../context/GameContext';
 import { Card } from '../components/ui/Card';
 import { ConfirmModal } from '../components/ui/Modal';
+import { tr } from '../i18n/tr';
 import type { Theme } from '../types';
 
 function Toggle({
@@ -24,7 +25,7 @@ function Toggle({
         onClick={() => onChange(!checked)}
       >
         <span className="setting-toggle__knob" />
-        <span className="setting-toggle__text">{checked ? 'ON' : 'OFF'}</span>
+        <span className="setting-toggle__text">{checked ? tr.settings.on : tr.settings.off}</span>
       </button>
     </label>
   );
@@ -37,23 +38,23 @@ export function SettingsPage() {
 
   return (
     <div className="page settings-page">
-      <h1 className="page-title">Settings</h1>
-      <p className="page-subtitle">Customize your experience</p>
+      <h1 className="page-title">{tr.settings.title}</h1>
+      <p className="page-subtitle">{tr.settings.subtitle}</p>
 
       <Card className="settings-panel">
         <Toggle
-          label="Sound"
+          label={tr.settings.sound}
           checked={settings.sound}
           onChange={(v) => updateSettings({ sound: v })}
         />
         <Toggle
-          label="Animations"
+          label={tr.settings.animations}
           checked={settings.animations}
           onChange={(v) => updateSettings({ animations: v })}
         />
 
         <div className="setting-theme">
-          <span className="setting-toggle__label">Theme</span>
+          <span className="setting-toggle__label">{tr.settings.theme}</span>
           <div className="theme-toggle">
             {(['dark', 'light'] as Theme[]).map((t) => (
               <button
@@ -62,7 +63,7 @@ export function SettingsPage() {
                 onClick={() => updateSettings({ theme: t })}
                 aria-pressed={settings.theme === t}
               >
-                {t === 'dark' ? '🌙 Dark' : '☀️ Light'}
+                {t === 'dark' ? tr.settings.dark : tr.settings.light}
               </button>
             ))}
           </div>
@@ -70,10 +71,10 @@ export function SettingsPage() {
       </Card>
 
       <Card className="settings-panel settings-panel--danger">
-        <h3 className="settings-panel__title">Danger Zone</h3>
-        <p className="settings-panel__desc">Permanently delete all your progress.</p>
+        <h3 className="settings-panel__title">{tr.settings.dangerZone}</h3>
+        <p className="settings-panel__desc">{tr.settings.dangerDesc}</p>
         <button className="btn btn--danger" onClick={() => setShowReset(true)}>
-          Reset Progress
+          {tr.settings.resetProgress}
         </button>
       </Card>
 
@@ -81,10 +82,10 @@ export function SettingsPage() {
         open={showReset}
         onClose={() => setShowReset(false)}
         onConfirm={resetProgress}
-        title="Are you sure?"
-        message="All progress will be permanently deleted."
-        confirmLabel="Reset"
-        cancelLabel="Cancel"
+        title={tr.settings.confirmTitle}
+        message={tr.settings.confirmMessage}
+        confirmLabel={tr.settings.confirm}
+        cancelLabel={tr.settings.cancel}
         danger
       />
     </div>

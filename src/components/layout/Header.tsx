@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { tr } from '../../i18n/tr';
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home' },
-  { to: '/play', label: 'Play' },
-  { to: '/statistics', label: 'Statistics' },
-  { to: '/achievements', label: 'Achievements' },
-  { to: '/settings', label: 'Settings' },
+  { to: '/', label: tr.nav.home },
+  { to: '/play', label: tr.nav.play },
+  { to: '/statistics', label: tr.nav.statistics },
+  { to: '/achievements', label: tr.nav.achievements },
+  { to: '/settings', label: tr.nav.settings },
 ];
 
 export function Header() {
@@ -26,13 +27,13 @@ export function Header() {
         <button
           className="header__menu-btn"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? tr.nav.closeMenu : tr.nav.openMenu}
           aria-expanded={menuOpen}
         >
           <span className={`hamburger ${menuOpen ? 'hamburger--open' : ''}`} />
         </button>
 
-        <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`} aria-label="Main navigation">
+        <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`} aria-label="Ana menü">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}

@@ -11,6 +11,7 @@ import { GameEndModal } from '../components/game/GameEndModal';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { DIFFICULTIES } from '../config/gameConfig';
+import { tr } from '../i18n/tr';
 import type { GameModeId, DifficultyId } from '../types';
 
 export function PlayPage() {
@@ -38,24 +39,24 @@ export function PlayPage() {
   if (!gameState) {
     return (
       <div className="page play-page">
-        <h1 className="page-title">Play</h1>
-        <p className="page-subtitle">Choose your mode and difficulty, then start hunting!</p>
+        <h1 className="page-title">{tr.play.title}</h1>
+        <p className="page-subtitle">{tr.play.subtitle}</p>
 
         <ModeSelector selected={selectedMode} onChange={setSelectedMode} />
         <DifficultySelector selected={selectedDifficulty} onChange={setSelectedDifficulty} />
 
         {selectedMode === 'challenge' && (
           <Card className="challenge-card">
-            <h3>🏅 Daily Challenge</h3>
+            <h3>🏅 {tr.play.dailyChallenge}</h3>
             <p>{dailyChallenge.description}</p>
             {player.dailyChallengeCompleted && (
-              <p className="challenge-card__completed">✅ Completed today!</p>
+              <p className="challenge-card__completed">{tr.play.completedToday}</p>
             )}
           </Card>
         )}
 
         <Button size="lg" onClick={handleStart} className="play-start-btn">
-          START GAME
+          {tr.play.startGame}
         </Button>
       </div>
     );
@@ -81,7 +82,7 @@ export function PlayPage() {
           <ResultMessage />
           <HintButton />
           <Button variant="ghost" onClick={endGame} className="quit-btn">
-            Quit Game
+            {tr.play.quitGame}
           </Button>
         </>
       )}

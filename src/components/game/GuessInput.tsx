@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type KeyboardEvent } from 'react';
 import { Button } from '../ui/Button';
+import { tr } from '../../i18n/tr';
 
 interface GuessInputProps {
   onSubmit: (value: string) => void;
@@ -27,18 +28,18 @@ export function GuessInput({ onSubmit, disabled, min, max }: GuessInputProps) {
       <input
         type="number"
         className="guess-input__field"
-        placeholder="Enter your guess..."
+        placeholder={tr.game.enterGuess}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
         min={min}
         max={max}
-        aria-label={`Enter a number between ${min} and ${max}`}
+        aria-label={`${min} ile ${max} arasında bir sayı gir`}
         inputMode="numeric"
       />
       <Button type="submit" size="lg" disabled={disabled || !value.trim()}>
-        GUESS
+        {tr.game.guess}
       </Button>
     </form>
   );

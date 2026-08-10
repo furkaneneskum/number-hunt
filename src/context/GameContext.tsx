@@ -1,6 +1,7 @@
 import { createContext, useContext, useCallback, useState, useEffect, useRef, type ReactNode } from 'react';
 import type { PlayerData, GameState, GuessFeedback, GameModeId, DifficultyId } from '../types';
 import { loadPlayer, savePlayer, resetPlayer as resetStorage } from '../services/storage';
+import { tr } from '../i18n/tr';
 import {
   createGameState,
   validateGuess,
@@ -200,7 +201,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         setFeedback({
           result: 'tooLow',
           proximity: null,
-          message: validation.error ?? 'Invalid input',
+          message: validation.error ?? tr.game.invalidInput,
           subMessage: '',
           emoji: '⚠️',
           isDuplicate: validation.isDuplicate ?? false,
@@ -338,7 +339,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const useHintAction = useCallback(() => {
     if (!gameState || gameState.gameStatus !== 'playing') return;
     if (gameState.challengeNoHints) {
-      setHintMessage('Hints are disabled for this challenge!');
+      setHintMessage(tr.game.hintsDisabledChallenge);
       return;
     }
 

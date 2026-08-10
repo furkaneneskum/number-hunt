@@ -5,11 +5,12 @@ import type {
   StreakMultiplierTier,
   DailyChallenge,
 } from '../types';
+import { tr } from '../i18n/tr';
 
 export const DIFFICULTIES: Record<string, DifficultyConfig> = {
   easy: {
     id: 'easy',
-    label: 'Easy',
+    label: tr.difficulties.easy,
     min: 1,
     max: 50,
     maxAttempts: 10,
@@ -18,7 +19,7 @@ export const DIFFICULTIES: Record<string, DifficultyConfig> = {
   },
   medium: {
     id: 'medium',
-    label: 'Medium',
+    label: tr.difficulties.medium,
     min: 1,
     max: 100,
     maxAttempts: 8,
@@ -27,7 +28,7 @@ export const DIFFICULTIES: Record<string, DifficultyConfig> = {
   },
   hard: {
     id: 'hard',
-    label: 'Hard',
+    label: tr.difficulties.hard,
     min: 1,
     max: 500,
     maxAttempts: 10,
@@ -36,7 +37,7 @@ export const DIFFICULTIES: Record<string, DifficultyConfig> = {
   },
   insane: {
     id: 'insane',
-    label: 'Insane',
+    label: tr.difficulties.insane,
     min: 1,
     max: 1000,
     maxAttempts: 7,
@@ -48,8 +49,8 @@ export const DIFFICULTIES: Record<string, DifficultyConfig> = {
 export const GAME_MODES: Record<string, GameModeConfig> = {
   classic: {
     id: 'classic',
-    label: 'Classic',
-    description: 'Find the secret number with limited attempts.',
+    label: tr.modes.classic.label,
+    description: tr.modes.classic.description,
     icon: '🎯',
     usesAttempts: true,
     usesLives: false,
@@ -57,8 +58,8 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
   },
   timeAttack: {
     id: 'timeAttack',
-    label: 'Time Attack',
-    description: 'Find as many numbers as you can in 60 seconds!',
+    label: tr.modes.timeAttack.label,
+    description: tr.modes.timeAttack.description,
     icon: '⏱️',
     usesAttempts: false,
     usesLives: false,
@@ -68,8 +69,8 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
   },
   streak: {
     id: 'streak',
-    label: 'Streak',
-    description: 'Build the longest correct streak possible.',
+    label: tr.modes.streak.label,
+    description: tr.modes.streak.description,
     icon: '🔥',
     usesAttempts: false,
     usesLives: true,
@@ -77,8 +78,8 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
   },
   challenge: {
     id: 'challenge',
-    label: 'Challenge',
-    description: 'Complete the daily challenge for bonus XP.',
+    label: tr.modes.challenge.label,
+    description: tr.modes.challenge.description,
     icon: '🏅',
     usesAttempts: true,
     usesLives: false,
@@ -87,10 +88,10 @@ export const GAME_MODES: Record<string, GameModeConfig> = {
 };
 
 export const PROXIMITY_LEVELS: ProximityConfig[] = [
-  { id: 'veryClose', label: 'Very Close!', emoji: '🔥', threshold: 0.05 },
-  { id: 'warm', label: 'Getting Warm', emoji: '🙂', threshold: 0.15 },
-  { id: 'far', label: 'Getting Colder', emoji: '🌡️', threshold: 0.35 },
-  { id: 'veryFar', label: 'Very Far', emoji: '❄️', threshold: 1 },
+  { id: 'veryClose', label: tr.proximity.veryClose, emoji: '🔥', threshold: 0.05 },
+  { id: 'warm', label: tr.proximity.warm, emoji: '🙂', threshold: 0.15 },
+  { id: 'far', label: tr.proximity.far, emoji: '🌡️', threshold: 0.35 },
+  { id: 'veryFar', label: tr.proximity.veryFar, emoji: '❄️', threshold: 1 },
 ];
 
 export const STREAK_MULTIPLIERS: StreakMultiplierTier[] = [
@@ -152,10 +153,10 @@ export function generateDailyChallenge(date: Date): DailyChallenge {
   const dateStr = date.toISOString().slice(0, 10);
   const seed = dateStr.split('-').reduce((a, b) => a + parseInt(b, 10), 0);
   const variants = [
-    { description: 'Guess the number in 5 attempts.', maxAttempts: 5, difficulty: 'medium' as const, noHints: false },
-    { description: 'Find 3 numbers without using hints.', maxAttempts: 8, difficulty: 'easy' as const, noHints: true },
-    { description: 'Beat Insane mode in 7 attempts.', maxAttempts: 7, difficulty: 'insane' as const, noHints: false },
-    { description: 'Guess correctly on your first try.', maxAttempts: 1, difficulty: 'easy' as const, noHints: true },
+    { description: tr.dailyChallenges.fiveAttempts, maxAttempts: 5, difficulty: 'medium' as const, noHints: false },
+    { description: tr.dailyChallenges.noHints, maxAttempts: 8, difficulty: 'easy' as const, noHints: true },
+    { description: tr.dailyChallenges.insaneSeven, maxAttempts: 7, difficulty: 'insane' as const, noHints: false },
+    { description: tr.dailyChallenges.firstTry, maxAttempts: 1, difficulty: 'easy' as const, noHints: true },
   ];
   const variant = variants[seed % variants.length];
   return {
